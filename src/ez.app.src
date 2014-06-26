@@ -1,0 +1,19 @@
+{application, ez,
+ [
+  {description, ""},
+  {vsn, "1.0.0"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {deps, [sasl, syntax_tools, compiler, lager]},
+  {mod, { ez_app, []}},
+  {hosts, [{localhost, 2181},
+		{ localhost, 2182},
+		{ localhost, 2183}]
+
+	},
+  {start_phases, [{init, []}]},
+  {chroot, []}
+ ]}.
