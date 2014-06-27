@@ -1,7 +1,7 @@
 -module(ez_data_tests).
 -compile(export_all).
 
--include("/Users/browrk/workspace/erlang/erl-zookeeper/include/ez_records.erl").
+-include("../include/ez_records.erl").
 
 -include_lib("eunit/include/eunit.hrl").
 
