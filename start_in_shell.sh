@@ -1,1 +1,1 @@
-erl -K true +P 10000 -env ERL_MAX_PORTS 10000 -pa ebin deps/lager/ebin deps/goldrush/ebin deps/ezk/ebin -boot start_sasl -name suptest@rich.suptest.com -setcookie COOKIE -eval "application:start(ez)."
+erl -K true +P 10000 -env ERL_MAX_PORTS 10000 -pa ebin deps/lager/ebin deps/goldrush/ebin deps/ezk/ebin -boot start_sasl -name suptest@rich.suptest.com -config app -setcookie COOKIE -eval "application:start(ez)."
