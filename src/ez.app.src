@@ -15,5 +15,5 @@
 
 	},
   {start_phases, [{init, []}]},
-  {chroot, []}
+  {chroot, ""}
  ]}.
