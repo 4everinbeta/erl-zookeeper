@@ -1,6 +1,6 @@
 {application, ez,
  [
-  {description, ""},
+  {description, "Demo Zookeeper integration in Erlang"},
   {vsn, "1.0.0"},
   {registered, []},
   {applications, [
