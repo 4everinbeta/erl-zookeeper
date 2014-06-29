@@ -7,7 +7,7 @@ A simple erlang application to test reading and writing to zookeeper.
 The included ezk application has very chatty logging. Depending on your preferences, you may
 choose to turn the logging down or off entirely.  It is currently turned off, assuming that rebar
 doesn't update it. To change it open deps/ezk/src/ezk_log.erl. Near the top of the file you'll see
-    %%
+ ```%%
     %% Determines what kind of messages should be logged.
     %%   0 - nothing
     %%   1 - important things
@@ -15,7 +15,8 @@ doesn't update it. To change it open deps/ezk/src/ezk_log.erl. Near the top of t
     %%   3 - most things
     %%   4 - also heartbeats
     -define(LEVEL, 0).
-    
+```
+
 The logging level is controlled by the **LEVEL** definition.  The original setting is 3.
 
 # Creating and running a release created by rebar
