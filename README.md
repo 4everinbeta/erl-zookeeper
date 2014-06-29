@@ -25,16 +25,18 @@ An executable release of this application, including all it's dependencies, can 
 rebar.  [A general overview of how to use rebar to create releases can be found on the rebar wiki.] (https://github.com/basho/rebar/wiki/Release-handling)  
 
 To create the release ensure you are in the project root directory and run
-    rebar compile generate
+```rebar compile generate
 
 This will create several directories and new files.
 
 The following files are used by rebar to generate a release.
+
 1. src/ez_app.src
 2. rel/reltool.config
 3. rebar.config
 
 The following is one of the files created when a release is generated.
+
 1. rel/files/sys.config
 
 ## src/ez_app.src
@@ -45,7 +47,7 @@ tuple needs to list every required application.  Rebar uses this information to 
 ## rel/reltool.config
 
 It is very important to get this file correct.  It is created by executing
-    rebar create-node nodeid=ez
+```rebar create-node nodeid=ez
 from within an empty *rel* directory.  This command creates all the basic files used by rebar to 
 create the release.  The *nodeid* seems to have to be set to the name of the application in the
 src/ez_app.src file.
@@ -56,7 +58,7 @@ to this file are described next.
 
 The base rel/reltool.config file is heavily modified to account for all the prerequisite applications
 (e.g., lager). In particular, the following lines have been changed:
-    ...
+```...
     {lib_dirs, ["../deps"]}, %% "../deps" is the location of the prerequisite apps
     ...
     %% The following entries were added to the file and must match the {applications, []} tuple 
@@ -70,6 +72,7 @@ The base rel/reltool.config file is heavily modified to account for all the prer
     
     %% {lib_dir, ".."} was added to the list and denotes the location of *ez*
     {app, ez, [{mod_cond, app}, {incl_cond, include}, {lib_dir, ".."}]}
+```
     
 The remainder of the file is unchanged.
 
@@ -82,14 +85,14 @@ is a registered sasl event handler and so *ezk* logging is also handled by *lage
 ## rebar.config
 
 The following line was added to the end of the standard rebar.config contents:
-    {sub_dirs, ["rel"]}.
+```{sub_dirs, ["rel"]}.
 
 # Running erl-zookeeper from the command line
 
 erl-zookeeper can be run from the command line using 
-    ./start_in_shell.sh file 
+```./start_in_shell.sh file 
 or 
-    rel/ez/bin/ez start  
+```rel/ez/bin/ez start  
 
 As the name implies, the result of the first approach will be a running erlang shell that can be 
 used to interact with the *ez* application.
@@ -97,13 +100,13 @@ used to interact with the *ez* application.
 The second approach uses the capability created by rebar when generating the release.  This command
 starts an Erlang node running all the required applications and *ez*.  An Erlang remote shell
 can be used to interact with the application by running
-    rel/ez/bin/ez attach
+```rel/ez/bin/ez attach
     
 # Interacting with the application
 
 Inspecting src/ez_data.erl can be used to discover the API for the application.  The simplest way 
 to quickly see what the app does is to run
-    ez_data:selftest().
+```ez_data:selftest().
 
 This will create, change, watch, verify, and remove data nodes from Zookeeper.
 
