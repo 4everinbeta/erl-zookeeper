@@ -85,13 +85,16 @@ is a registered sasl event handler and so *ezk* logging is also handled by *lage
 ## rebar.config
 
 The following line was added to the end of the standard rebar.config contents:
+
 ```{sub_dirs, ["rel"]}.
 
 # Running erl-zookeeper from the command line
 
 erl-zookeeper can be run from the command line using 
+
 ```./start_in_shell.sh file 
 or 
+
 ```rel/ez/bin/ez start  
 
 As the name implies, the result of the first approach will be a running erlang shell that can be 
@@ -100,12 +103,14 @@ used to interact with the *ez* application.
 The second approach uses the capability created by rebar when generating the release.  This command
 starts an Erlang node running all the required applications and *ez*.  An Erlang remote shell
 can be used to interact with the application by running
+
 ```rel/ez/bin/ez attach
     
 # Interacting with the application
 
 Inspecting src/ez_data.erl can be used to discover the API for the application.  The simplest way 
 to quickly see what the app does is to run
+
 ```ez_data:selftest().
 
 This will create, change, watch, verify, and remove data nodes from Zookeeper.
