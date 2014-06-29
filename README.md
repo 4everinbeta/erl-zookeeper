@@ -21,13 +21,20 @@ The logging level is controlled by the **LEVEL** definition.  The original setti
 # Creating and running a release created by rebar
 
 An executable release of this application, including all it's dependencies, can be created using
-rebar.  [A general overview of how to use rebar to create releases can be found on the rebar wiki.] (https://github.com/basho/rebar/wiki/Release-handling)
+rebar.  [A general overview of how to use rebar to create releases can be found on the rebar wiki.] (https://github.com/basho/rebar/wiki/Release-handling)  
+
+To create the release ensure you are in the project root directory and run
+    rebar compile generate
+
+This will create several directories and new files.
 
 The following files are used by rebar to generate a release.
 1. src/ez_app.src
 2. rel/reltool.config
-3. rel/files/sys.config
-4. rebar.config
+3. rebar.config
+
+The following is one of the files created when a release is generated.
+1. rel/files/sys.config
 
 ## src/ez_app.src
 
@@ -42,12 +49,17 @@ from within an empty *rel* directory.  This command creates all the basic files 
 create the release.  The *nodeid* seems to have to be set to the name of the application in the
 src/ez_app.src file.
 
+Since rel/reltool.config has already been created using the above command, this **must** not be 
+run again.  Doing so may reset rel/reltool.config to its original state.  That said, the changes
+to this file are described next.
+
 The base rel/reltool.config file is heavily modified to account for all the prerequisite applications
 (e.g., lager). In particular, the following lines have been changed:
     ...
     {lib_dirs, ["../deps"]}, %% "../deps" is the location of the prerequisite apps
     ...
-    %% The following entries must match the {applications, []} tuple in src/ez_app.src
+    %% The following entries were added to the file and must match the {applications, []} tuple 
+    %% in src/ez_app.src
     {app, sasl,   [{incl_cond, include}]},
     {app, compiler,   [{incl_cond, include}]},
     {app, syntax_tools,   [{incl_cond, include}]},
@@ -71,7 +83,7 @@ is a registered sasl event handler and so *ezk* logging is also handled by *lage
 The following line was added to the end of the standard rebar.config contents:
     {sub_dirs, ["rel"]}.
 
-# Running from the command line
+# Running erl-zookeeper from the command line
 
 erl-zookeeper can be run from the command line using 
     ./start_in_shell.sh file 
