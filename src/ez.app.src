@@ -5,9 +5,15 @@
   {registered, []},
   {applications, [
                   kernel,
-                  stdlib
+                  stdlib,
+                  sasl,
+                  compiler,
+                  syntax_tools,
+                  goldrush,
+                  lager,
+                  ezk
                  ]},
-  {deps, [sasl, syntax_tools, compiler, lager]},
+  {deps, [sasl, syntax_tools, compiler, syntax_tools, goldrush, lager, ezk]},
   {mod, { ez_app, []}},
   {hosts, [{localhost, 2181},
 		{ localhost, 2182},

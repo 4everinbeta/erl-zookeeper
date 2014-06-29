@@ -2,3 +2,6 @@ deps/*
 ebin/*
 log/*
 /ebin
+/rel/ez
+/rel/files
+.rebar
