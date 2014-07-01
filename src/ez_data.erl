@@ -11,6 +11,8 @@
     add_consumer/1,
     get/1,
     getw/3,
+    ls/1,
+    ls2/1,
     set/2
 ]).
 
@@ -66,6 +68,15 @@ exists(Path) ->
 % Gets the value stored in a ZK node `Path`.
 get(Path) ->
     gen_server:call(?MODULE, {get, Path}).
+
+% Gets all children for the provided ZK node `Path`.
+ls(Path) ->
+    gen_server:call(?MODULE, {ls, Path}).
+
+% Gets all children for the provided ZK node `Path`.
+ls2(Path) ->
+    gen_server:call(?MODULE, {ls2, Path}).
+
 
 % Gets the value stored in a ZK node `Path` and sets up a ZK watch.
 % The watch will notify `FromPid` about modification of the
@@ -133,6 +144,18 @@ handle_call({get, Path}, _From, #state{zk_connection = ZK, chroot = Chroot} = St
     FullPath = chroot_path(Chroot, Path),
     ZKResponse = ezk:get(ZK, FullPath),
     lager:info("[handle_call] {get ~p} = ~120p", [{Path, FullPath}, ZKResponse]),
+    {reply, ZKResponse, State};
+
+handle_call({ls, Path}, _From, #state{zk_connection = ZK, chroot = Chroot} = State) ->
+    FullPath = chroot_path(Chroot, Path),
+    ZKResponse = ezk:ls(ZK, FullPath),
+    lager:info("[handle_call] {ls ~p} = ~120p", [{Path, FullPath}, ZKResponse]),
+    {reply, ZKResponse, State};
+
+handle_call({ls2, Path}, _From, #state{zk_connection = ZK, chroot = Chroot} = State) ->
+    FullPath = chroot_path(Chroot, Path),
+    ZKResponse = ezk:ls2(ZK, FullPath),
+    lager:info("[handle_call] {ls2 ~p} = ~120p", [{Path, FullPath}, ZKResponse]),
     {reply, ZKResponse, State};
 
 handle_call({getw, Path, FromPid, FromTag}, _From, #state{zk_connection = ZK, chroot = Chroot} = State) ->
