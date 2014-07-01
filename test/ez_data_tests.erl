@@ -1,9 +1,9 @@
 -module(ez_data_tests).
 -export([test_parent_znode_creation/0, test_child_znode_creation/0,test_parent_child_relationship_creation/0]).
 
--include("/Users/browrk/workspace/erlang/erl-zookeeper/include/ez_records.hrl").
+-include("../include/ez_records.erl").
 
--include_lib("/Users/browrk/workspace/erlang/erl-zookeeper/deps/eunit/include/eunit.hrl").
+-include_lib("../deps/eunit/include/eunit.hrl").
 
 test_parent_znode_creation() ->
 	{ok, ParentId} = create_parent_znode(),
