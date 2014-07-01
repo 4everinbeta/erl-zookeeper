@@ -5,6 +5,7 @@
 % Public API
 -export([
     chroot/0,
+	chroot_path/2,
     create/2,
     delete/1,
     exists/1,
@@ -249,7 +250,9 @@ selftest() ->
     {ok, {<<"new test data">>, _}} = getw(TestKey, self(), {watches_test, TestKey}),
     {ok, _} = set(TestKey, <<"newer test data">>),
     receive
-        {{watches_test, TestKey}, {ChrootedTestKey, data_changed, 3}} -> ok
+        {{watches_test, TestKey}, {ChrootedTestKey, data_changed, 3}} -> 
+			lager:info("Received watch for znode <<~p>>", [TestKey]),
+			ok
     after 1000 ->
         error(failed_watches_test)
     end,
