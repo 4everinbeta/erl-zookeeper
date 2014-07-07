@@ -1,48 +1,52 @@
 -module(ez_data_tests).
 -export([test_parent_znode_creation/0, test_child_znode_creation/0,test_parent_child_relationship_creation/0]).
 
--include("../include/ez_records.erl").
+-include("../include/ez_records.hrl").
 
--include_lib("../deps/eunit/include/eunit.hrl").
+%-include_lib("../deps/eunit/include/eunit.hrl").
+-include_lib("eunit/include/eunit.hrl").
 
 test_parent_znode_creation() ->
-	{ok, ParentId} = create_parent_znode(),
-        ParentKey = string:concat("/", ParentId),
-        {ok, _} = ez_data:exists(ParentKey),
-	{ok, ParentKey} = ez_data:delete(ParentKey),
-    	{error, no_dir} = ez_data:exists(ParentKey),
-    	{error, no_dir} = ez_data:get(ParentKey),
-    	{error, no_dir} = ez_data:set(ParentKey, <<"test data">>),
-    	{error, no_dir} = ez_data:delete(ParentKey),	
+	TS = get_timestamp_milliseconds(),
+	ParentId = io_lib:format("~p", [TS]),
+	ParentRec = #ez_parent{id=ParentId,first_name="Ryan", last_name=lists:flatten(["Brown", ParentId])},
+	{ok, ParentId} = ez_parent_store:insert(ParentRec),
+        ParentKey = lists:flatten(["/", ParentId]),
+        ?assertMatch({ok, _}, ez_parent_store:get(ParentRec)),
+	?assertMatch({ok, _}, ez_parent_store:delete(ParentRec)),
+    	?assertMatch({error, no_dir}, ez_data:exists(ParentKey)),
+    	?assertMatch({error, no_dir}, ez_data:get(ParentKey)),
+    	?assertMatch({error, no_dir}, ez_data:set(ParentKey, <<"test data">>)),
+    	?assertMatch({error, no_dir}, ez_data:delete(ParentKey)),	
 	ok.
 
 
 test_child_znode_creation() ->
 	%% Insert Parent First
 	{ok, ParentId} = create_parent_znode(),
-        ParentKey = string:concat("/", ParentId),
+        ParentKey = lists:flatten(["/", ParentId]),
         {ok, _} = ez_data:exists(ParentKey),
 	%% Insert child
-	{ok, ChildId} = create_child_znode(ParentId),
+	ChildId = create_child_znode(ParentId),
 	ChildKey = lists:flatten([ParentKey, "/", ChildId]),
-	{ok, _} = ez_data:exists(ChildKey),
-	{ok, ChildKey} = ez_data:delete(ChildKey),
-    	{error, no_dir} = ez_data:exists(ChildKey),
-    	{error, no_dir} = ez_data:get(ChildKey),
-    	{error, no_dir} = ez_data:set(ChildKey, <<"test data">>),
-    	{error, no_dir} = ez_data:delete(ChildKey),	
+	?assertMatch({ok, _}, ez_data:exists(ChildKey)),
+	?assertMatch({ok, _}, ez_data:delete(ChildKey)),
+    	?assertMatch({error, no_dir}, ez_data:exists(ChildKey)),
+    	?assertMatch({error, no_dir}, ez_data:get(ChildKey)),
+    	?assertMatch({error, no_dir}, ez_data:set(ChildKey, <<"test data">>)),
+    	?assertMatch({error, no_dir}, ez_data:delete(ChildKey)),	
 	ok.
 
 test_parent_child_relationship_creation() ->
         %% Insert Parent First
         {ok, ParentId} = create_parent_znode(),
         ParentKey = string:concat("/", ParentId),
-        {ok, _} = ez_data:exists(ParentKey),
+        ?assertMatch({ok, _}, ez_data:exists(ParentKey)),
         %% Insert children
         {ok, ChildIds} = create_children(10, ParentId),
 	10 = erlang:length(ChildIds),
 	VerifResults = verify_children(ParentKey, ChildIds),
-	io:format("VerifResults = ~p~n", VerifResults).
+	io:format("VerifResults = ~p~n", [VerifResults]).
 
 verify_children(ParentKey, Children) ->
 	verify_children(ParentKey, Children, []).
